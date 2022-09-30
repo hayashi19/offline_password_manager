@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:offline_passowrd_manager/controller/controller.dart';
+import 'package:offline_passowrd_manager/models/list_model.dart';
 
 class NotePage extends StatelessWidget {
   const NotePage({Key? key}) : super(key: key);
@@ -11,26 +12,24 @@ class NotePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final HomePageController homePageController = Get.put(HomePageController());
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: ListView(children: const <Widget>[
-          TitleInputNotePage(),
-          Divider(),
-          UsernameInputNotePage(),
-          PwInputNotePage(),
-          RandomPwNotePage(),
-          Divider(height: 32),
-          PwSettingNotePage(),
-          Divider(),
-          NoteNotePage(),
-          BackButtonNotePage()
-        ]),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => homePageController.savedPw(),
-        child: const Icon(Icons.save)
-      )
-    );
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: ListView(children: const <Widget>[
+            TitleInputNotePage(),
+            Divider(),
+            UsernameInputNotePage(),
+            PwInputNotePage(),
+            RandomPwNotePage(),
+            Divider(height: 32),
+            PwSettingNotePage(),
+            Divider(),
+            NoteNotePage(),
+            BackButtonNotePage()
+          ]),
+        ),
+        floatingActionButton: FloatingActionButton(
+            onPressed: () => homePageController.savedPw(),
+            child: const Icon(Icons.save)));
   }
 }
 
@@ -42,15 +41,18 @@ class NotePageEdit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomePageController homePageController = Get.put(HomePageController());
-    homePageController.titleInputController.text = homePageController.pwList[index].title;
-    homePageController.userInputController.text = homePageController.pwList[index].username;
-    homePageController.pwInputController.text = homePageController.pwList[index].pw;
-    homePageController.noteInputController.text = homePageController.pwList[index].note;
+    homePageController.titleInputController.text =
+        homePageController.pwList[index].title;
+    homePageController.userInputController.text =
+        homePageController.pwList[index].username;
+    homePageController.pwInputController.text =
+        homePageController.pwList[index].pw;
+    homePageController.noteInputController.text =
+        homePageController.pwList[index].note;
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: ListView(
-          children: const <Widget>[
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: ListView(children: const <Widget>[
             TitleInputNotePage(),
             Divider(),
             UsernameInputNotePage(),
@@ -61,29 +63,39 @@ class NotePageEdit extends StatelessWidget {
             Divider(),
             NoteNotePage(),
             BackButtonNotePage()
-          ]
+          ]),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (index.isNull) {
-            homePageController.savedPw();
-          }
-          else {
-            homePageController.pwList[index].title = homePageController.titleInputController.text;
-            homePageController.pwList[index].username = homePageController.userInputController.text;
-            homePageController.pwList[index].pw = homePageController.pwInputController.text;
-            homePageController.pwList[index].note = homePageController.noteInputController.text;
-            homePageController.titleInputController.clear();
-            homePageController.userInputController.clear();
-            homePageController.pwInputController.clear();
-            homePageController.noteInputController.clear();
-            Get.back();
-          }
-        },
-        child: const Icon(Icons.save)
-      )
-    );
+        floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              if (index.isNull) {
+                homePageController.savedPw();
+              } else {
+                homePageController.pwList.insert(
+                    index,
+                    Todo(
+                        title: homePageController.titleInputController.text,
+                        username: homePageController.userInputController.text,
+                        pw: homePageController.pwInputController.text,
+                        note: homePageController.noteInputController.text,
+                        show: false));
+                homePageController.pwList.removeAt(index + 1);
+                // homePageController.pwList.
+                // homePageController.pwList[index].title =
+                //     homePageController.titleInputController.text;
+                // homePageController.pwList[index].username =
+                //     homePageController.userInputController.text;
+                // homePageController.pwList[index].pw =
+                //     homePageController.pwInputController.text;
+                // homePageController.pwList[index].note =
+                //     homePageController.noteInputController.text;
+                homePageController.titleInputController.clear();
+                homePageController.userInputController.clear();
+                homePageController.pwInputController.clear();
+                homePageController.noteInputController.clear();
+                Get.back();
+              }
+            },
+            child: const Icon(Icons.save)));
   }
 }
 
@@ -222,12 +234,11 @@ class PwSettingNotePage extends StatelessWidget {
                 max: 32,
                 min: 4,
                 divisions: 14,
-                label:
-                    homePageController.whatPasswordLenght.round().toString(),
+                label: homePageController.whatPasswordLenght.round().toString(),
                 onChanged: (value) =>
                     homePageController.whatPasswordLenght.value = value)),
             Obx(() => Text(
-                " ${homePageController.whatPasswordLenght.round().toString()} Chars"))
+                "${homePageController.whatPasswordLenght.round().toString()} Chars"))
           ],
         )
       ],
@@ -235,7 +246,7 @@ class PwSettingNotePage extends StatelessWidget {
   }
 }
 
-class NoteNotePage  extends StatelessWidget {
+class NoteNotePage extends StatelessWidget {
   const NoteNotePage({Key? key}) : super(key: key);
 
   @override
@@ -268,7 +279,7 @@ class BackButtonNotePage extends StatelessWidget {
     return RaisedButton(
       onPressed: () {
         Get.back();
-      }, 
+      },
       child: const Text("BACK"),
       color: Colors.redAccent,
     );

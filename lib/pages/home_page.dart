@@ -19,9 +19,8 @@ class HomePage extends StatelessWidget {
         centerTitle: true,
         actions: <Widget>[
           IconButton(
-            onPressed: () => ThemeService().switchTheme(), 
-            icon: homePageController.themeIcon.value
-          )
+              onPressed: () => ThemeService().switchTheme(),
+              icon: homePageController.themeIcon.value)
         ],
       ),
       body: Padding(
@@ -59,45 +58,42 @@ class PwListHomePage extends StatelessWidget {
               onDismissed: (_) {
                 Todo? removed = homePageController.pwList[index];
                 homePageController.pwList.removeAt(index);
-                Get.snackbar(
-                  "Removed", 
-                  removed.title,
-                  mainButton: TextButton(
-                    onPressed: () {
-                      if (removed.isNull) {
-                        return;
-                      }
-                      homePageController.pwList.insert(index, removed!);
-                      removed = null;
-                      if (Get.isSnackbarOpen) {
-                        Get.back();
-                      }
-                    }, 
-                    child: const Text("Undo")
-                  )
-                );
+                Get.snackbar("Removed", removed.title,
+                    mainButton: TextButton(
+                        onPressed: () {
+                          if (removed.isNull) {
+                            return;
+                          }
+                          homePageController.pwList.insert(index, removed!);
+                          removed = null;
+                          if (Get.isSnackbarOpen) {
+                            Get.back();
+                          }
+                        },
+                        child: const Text("Undo")));
               },
               child: GestureDetector(
                 onTap: () => Get.to(NotePageEdit(index: index)),
                 child: Card(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text(
-                              homePageController.pwList[index].title.toUpperCase(),
-                              style: const TextStyle(
-                                color: Colors.blueAccent,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20
-                              ),
-                            ),
+                            Obx(() => Text(
+                                  homePageController.pwList[index].title
+                                      .toUpperCase(),
+                                  style: const TextStyle(
+                                      color: Colors.blueAccent,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                )),
                             Checkbox(
-                              value: homePageController.pwList[index].show, 
+                              value: homePageController.pwList[index].show,
                               onChanged: (value) {
                                 var changed = homePageController.pwList[index];
                                 changed.show = value!;
@@ -106,44 +102,55 @@ class PwListHomePage extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Visibility(
-                          visible: homePageController.pwList[index].show,
-                          child: const Divider()
-                        ),
-                        Visibility(
-                          visible: homePageController.pwList[index].show,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text("Username: ${homePageController.pwList[index].username}"),
-                              IconButton(
-                                icon: const Icon(Icons.copy),
-                                iconSize: 16,
-                                onPressed: () {
-                                  Clipboard.setData(ClipboardData(text: homePageController.pwList[index].username));
-                                  Get.snackbar("Username Copied", homePageController.pwList[index].username);
-                                },
-                              )
-                            ],
-                          ),
-                        ),
-                        Visibility(
-                          visible: homePageController.pwList[index].show,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text("Password: ${homePageController.pwList[index].pw}"),
-                              IconButton(
-                                icon: const Icon(Icons.copy),
-                                iconSize: 16,
-                                onPressed: () {
-                                  Clipboard.setData(ClipboardData(text: homePageController.pwList[index].pw));
-                                  Get.snackbar("Password Copied", homePageController.pwList[index].pw);
-                                },
-                              )
-                            ],
-                          ),
-                        ),
+                        Obx(() => Visibility(
+                            visible: homePageController.pwList[index].show,
+                            child: const Divider())),
+                        Obx(() => Visibility(
+                              visible: homePageController.pwList[index].show,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                      "Username: ${homePageController.pwList[index].username}"),
+                                  IconButton(
+                                    icon: const Icon(Icons.copy),
+                                    iconSize: 16,
+                                    onPressed: () {
+                                      Clipboard.setData(ClipboardData(
+                                          text: homePageController
+                                              .pwList[index].username));
+                                      Get.snackbar(
+                                          "Username Copied",
+                                          homePageController
+                                              .pwList[index].username);
+                                    },
+                                  )
+                                ],
+                              ),
+                            )),
+                        Obx(() => Visibility(
+                              visible: homePageController.pwList[index].show,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Obx(() => Text(
+                                      "Password: ${homePageController.pwList[index].pw}")),
+                                  IconButton(
+                                    icon: const Icon(Icons.copy),
+                                    iconSize: 16,
+                                    onPressed: () {
+                                      Clipboard.setData(ClipboardData(
+                                          text: homePageController
+                                              .pwList[index].pw));
+                                      Get.snackbar("Password Copied",
+                                          homePageController.pwList[index].pw);
+                                    },
+                                  )
+                                ],
+                              ),
+                            )),
                       ],
                     ),
                   ),
@@ -164,8 +171,7 @@ class WarnHomePage extends StatelessWidget {
     return const Text(
       "Make sure to backup all passwords before deleting the app.",
       textAlign: TextAlign.center,
-      style:
-          TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
+      style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
     );
   }
 }
